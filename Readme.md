@@ -4,11 +4,13 @@ This project demonstrates real-time face detection using OpenCV's DNN (Deep Neur
 
 ---
 
+
 ## 📸 Demo
 
 *Example only. Actual live webcam will be used.*
 
 ---
+
 
 ## 📂 Project Structure
 
@@ -19,6 +21,7 @@ Face_detection_project/
 - ── requirements.txt
 - ── README.md
 
+---
 
 
 ## ⚙️ Requirements
@@ -31,9 +34,11 @@ Make sure you have the following installed:
 
 You can install the dependencies with:
 
-```bash
+ ```bash
     pip install -r requirements.txt
-```
+ ```
+
+---
 
 
 ## 🧠 Model Details
@@ -42,25 +47,29 @@ This project uses a deep learning model based on a ResNet10 SSD (Single Shot Mul
 
 
 ### Download the required files:
-```bash
+ ```bash
     `deploy.prototxt`
     `res10_300x300_ssd_iter_140000.caffemodel`
-```
+ ```
 
 #### Rename or place them in the same folder as:
-```bash
-    `face_model.caffemodel`
-    `deploy.prototxt`
-```
+ ```bash
+    face_model.caffemodel
+    deploy.prototxt
+ ```
+
+---
 
 
 ## 🚀 How to Run
 
-```bash
+ ```bash
     python face_detection.py
-```
+ ```
 
 Press `q` to quit the webcam window.
+
+---
 
 
 ## 🎯 Features
@@ -77,6 +86,7 @@ Press `q` to quit the webcam window.
 
 - ✅ Auto-clamping to prevent frame-bound errors
 
+---
 
 
 ## 📌 Notes
@@ -85,16 +95,7 @@ Press `q` to quit the webcam window.
 
 - Accuracy threshold can be modified from `confidence > 0.5` in the `face_detector.py`.
 
-
-
-## 🔧 Future Improvements
-- Add face recognition
-
-- Integrate emotion or age/gender detection
-
-- Save detected faces
-
-- Deploy via Flask or Streamlit
+---
 
 
 ## 👨‍💻 Author
@@ -102,11 +103,14 @@ Press `q` to quit the webcam window.
 - GitHub: @harizonelopez
 - Email: @harizonelopez23@gmail.com
 
+---
 
 
 ## 📜 License
 
     MIT License
+
+---
 
 
 ### 📄 `requirements.txt`
