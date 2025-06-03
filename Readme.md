@@ -36,7 +36,7 @@ You can install the dependencies with:
 
  ```bash
     pip install -r requirements.txt
- ```
+```
 
 ---
 
@@ -47,18 +47,15 @@ This project uses a deep learning model based on a ResNet10 SSD (Single Shot Mul
 
 
 ### Download the required files:
-
- `
-    [deploy.protoxt] <a href="https://github.com/opencv/opencv/raw/master/samples/dnn/face_detector/deploy.prototxt">link</a>
-`
-    
-    [res10_300x300_ssd_iter_140000.caffemodel] @https://github.com/opencv/opencv_3rdparty/raw/dnn_samples_face_detector_20170830/res10_300x300_ssd_iter_140000.caffemodel
-
+ ```bash
+    `deploy.prototxt`
+    `res10_300x300_ssd_iter_140000.caffemodel`
+ ```
 
 #### Rename or place them in the same folder as:
  ```bash
-    `deploy.prototxt`
-    `face_model.caffemodel`
+    face_model.caffemodel
+    deploy.prototxt
  ```
 
 ---
