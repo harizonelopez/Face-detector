@@ -1,4 +1,4 @@
-# Real-Time Face Detection with OpenCV and Deep Learning
+# Real-Time Face Detection - with OpenCV and Deep Learning
 
 This project demonstrates real-time face detection using OpenCV's DNN (Deep Neural Network) module and a pre-trained Caffe model. It captures video from your webcam, detects faces in each frame, and displays bounding boxes and confidence scores.
 
