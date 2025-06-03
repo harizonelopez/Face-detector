@@ -42,16 +42,16 @@ This project uses a deep learning model based on a ResNet10 SSD (Single Shot Mul
 
 
 ### Download the required files:
-`deploy.prototxt`
-
-`res10_300x300_ssd_iter_140000.caffemodel`
-
+```bash
+    `deploy.prototxt`
+    `res10_300x300_ssd_iter_140000.caffemodel`
+```
 
 #### Rename or place them in the same folder as:
-
-`face_model.caffemodel`
-
-`deploy.prototxt`
+```bash
+    `face_model.caffemodel`
+    `deploy.prototxt`
+```
 
 
 ## 🚀 How to Run
