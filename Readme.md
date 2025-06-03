@@ -101,9 +101,8 @@ Press `q` to quit the webcam window.
 
 ## 👨‍💻 Author
 
-harizone lopez
-GitHub: @harizonelopez
-Email: @harizonelopez23@gmail.com
+- GitHub: @harizonelopez 
+- Email: @harizonelopez23@gmail.com
 
 
 
