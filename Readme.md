@@ -6,7 +6,6 @@ This project demonstrates real-time face detection using OpenCV's DNN (Deep Neur
 
 ## 📸 Demo
 
-![Face Detection Example](https://upload.wikimedia.org/wikipedia/commons/1/12/Face-detection.png)
 *Example only. Actual live webcam will be used.*
 
 ---
@@ -101,7 +100,7 @@ Press `q` to quit the webcam window.
 
 ## 👨‍💻 Author
 
-- GitHub: @harizonelopez 
+- GitHub: @harizonelopez
 - Email: @harizonelopez23@gmail.com
 
 
