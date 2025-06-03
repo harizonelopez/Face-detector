@@ -7,7 +7,7 @@ __pycache__/
 venv/
 ENV/
 
-# Saved face images (your user data)
+# Saved face images {user data}
 saved_faces/
 
 # VSCode settings folder
