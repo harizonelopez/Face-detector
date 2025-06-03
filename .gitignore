@@ -1,0 +1,17 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+ENV/
+
+# Saved face images (your user data)
+saved_faces/
+
+# VSCode settings folder
+.vscode/
+
+# Logs
+*.log
