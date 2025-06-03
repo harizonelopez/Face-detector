@@ -6,7 +6,7 @@ This project demonstrates real-time face detection using OpenCV's DNN (Deep Neur
 
 ## 📸 Demo
 
-![Face Detection Example](https://upload.wikimedia.org/wikipedia/commons/7/7d/Face_detection_sample.png)
+![Face Detection Example](https://upload.wikimedia.org/wikipedia/commons/1/12/Face-detection.png)
 *Example only. Actual live webcam will be used.*
 
 ---
@@ -85,7 +85,7 @@ Press `q` to quit the webcam window.
 
 - Works best in well-lit environments.
 
-- Accuracy threshold can be modified from `confidence > 0.5` in the script.
+- Accuracy threshold can be modified from `confidence > 0.5` in the `face_detector.py`.
 
 
 
@@ -103,6 +103,7 @@ Press `q` to quit the webcam window.
 
 harizone lopez
 GitHub: @harizonelopez
+Email: @harizonelopez23@gmail.com
 
 
 
