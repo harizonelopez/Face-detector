@@ -8,7 +8,7 @@ def main():
     modelFile = "face_model.caffemodel"
     configFile = "deploy.prototxt"
     
-    user_name = input("\nEnter your name: ").strip().lower().replace(" ", "_")
+    user_name = input("\nEnter your name: ").strip().lower().replace(" ", "_")  # Enter the username
     if not user_name:
         print("Invalid username! Exiting...")
         return
@@ -63,7 +63,7 @@ def main():
 
                 if saved_count < max_faces_to_save:
                     face_crop = frame[y1:y2, x1:x2]
-                    # Check face size (skip too small faces)
+                    # Check face size {skip too small faces}
                     if face_crop.shape[0] < 50 or face_crop.shape[1] < 50:
                         continue
                     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
