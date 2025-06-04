@@ -63,6 +63,7 @@ def main():
 
                 if saved_count < max_faces_to_save:
                     face_crop = frame[y1:y2, x1:x2]
+                    
                     # Check face size {skip too small faces}
                     if face_crop.shape[0] < 50 or face_crop.shape[1] < 50:
                         continue
