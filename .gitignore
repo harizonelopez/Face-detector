@@ -8,7 +8,7 @@ venv/
 ENV/
 
 # Saved face images {user data}
-saved_faces/
+saved-faces/
 
 # VSCode settings folder
 .vscode/
