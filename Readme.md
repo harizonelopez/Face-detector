@@ -12,18 +12,6 @@ This project demonstrates real-time face detection using OpenCV's DNN (Deep Neur
 ---
 
 
-## 📂 Project Structure
-
-Face_detection_project/
-- ── face_detection.py
-- ── face_model.caffemodel         # (You need to download this)
-- ── deploy.prototxt               # (You need to download this)
-- ── requirements.txt
-- ── README.md
-
----
-
-
 ## ⚙️ Requirements
 
 Make sure you have the following installed:
