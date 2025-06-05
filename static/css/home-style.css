@@ -1,0 +1,83 @@
+/* Body background & font */
+body {
+    background-color: #f0f2f5; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Center container */
+.container {
+    max-width: 480px;
+    margin: 60px auto;
+    background: white;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+}
+
+/* Page heading */
+h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #2c3e50;
+    font-weight: 700;
+}
+
+/* Form input styling */
+input[type="text"] {
+    border-radius: 6px;
+    border: 1.5px solid #ced4da;
+    padding: 10px 12px;
+    font-size: 1.1rem;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: #007bff; 
+    box-shadow: 0 0 8px rgba(0,123,255,0.25);
+}
+
+/* Submit button styling */
+button[type="submit"] {
+    width: 100%;
+    background-color: #007bff; 
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    padding: 12px 0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: 600;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Footer / small info text */
+footer {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #777;
+}
+
+.alert {
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 4px;
+  color: white;
+  font-weight: bold;
+}
+
+/* Responsive tweak */
+@media (max-width: 576px) {
+    .container {
+        margin: 30px 20px;
+        padding: 20px;
+    }
+}
