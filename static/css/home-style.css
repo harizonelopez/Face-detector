@@ -1,6 +1,6 @@
 /* Body background & font */
 body {
-    background-color: #f0f2f5; 
+    background-color: aqua; 
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #333;
     margin: 0;
@@ -11,7 +11,7 @@ body {
 .container {
     max-width: 480px;
     margin: 60px auto;
-    background: white;
+    background: aqua;
     padding: 30px 40px;
     border-radius: 10px;
     box-shadow: 0 6px 18px rgba(0,0,0,0.1);
