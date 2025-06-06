@@ -9,8 +9,9 @@ body {
 
 /* Center container */
 .container {
-    max-width: 480px;
-    margin: 60px auto;
+    max-width: 800px;
+    width: 100%;
+    margin: 20px auto;
     background: white;
     padding: 30px 40px;
     border-radius: 10px;
