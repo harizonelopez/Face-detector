@@ -9,8 +9,9 @@
     <link 
         rel="stylesheet" 
         href="{{ url_for('static', filename='css/home-style.css') }}">
+
 </head>
-<body class="bg-light">
+<body>
     <div class="container mt-5 d-flex justify-content-center">
         <div class="w-100" style="max-width: 500px;">
             <h2 class="text-center mb-4">Face Capture System</h2>
@@ -50,7 +51,6 @@
         <a href="{{ url_for('views.train') }}" class="btn btn-success" style="min-width: 180px;">Train Recognizer</a>
         <a href="{{ url_for('views.recognize') }}" class="btn btn-warning" style="min-width: 180px;">Start Recognition</a>
     </div>
-
     
     <!-- Extra Js scripts-->
     <script>
