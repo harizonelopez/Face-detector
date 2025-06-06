@@ -17,6 +17,7 @@ This project demonstrates real-time face detection using OpenCV's DNN (Deep Neur
 Make sure you have the following installed:
 
 - Python 3.6+
+- flask 3.1+
 - OpenCV with DNN module
 - NumPy
 
@@ -99,10 +100,3 @@ Press `q` to quit the webcam window.
     MIT License
 
 ---
-
-
-### 📄 `requirements.txt`
-
-- opencv-python
-- numpy
-- flask
