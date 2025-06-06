@@ -4,6 +4,7 @@ import os
 import time
 from datetime import datetime
 from flask import flash
+import face_recognition
 
 # Load model once globally
 modelFile = "face_model.caffemodel"
@@ -76,7 +77,13 @@ def capture_face(user_name):
             filename = os.path.join(save_dir, f"{user_name}_{timestamp}.jpg")
             cv2.imwrite(filename, face_crop)
 
-            flash(f"🎉 Success! {user_name.title()}, your face has been captured and saved securely.", "success")
+            # Recognize the newly captured face
+            recognized_user = recognize_face(filename)
+            if recognized_user:
+                flash(f"👋 Welcome back, {recognized_user.title()}! Face recognized successfully.", "success")
+            else:
+                flash(f"🎉 Success! {user_name.title()}, your face has been captured and saved securely.", "success")
+
             print(f"[200: INFO] Saved: {filename}")
             saved_count += 1
 
@@ -96,3 +103,35 @@ def capture_face(user_name):
 
     cap.release()
     cv2.destroyAllWindows()
+
+
+def recognize_face(new_face_path, saved_faces_dir="static/saved-faces"):
+    known_encodings = []
+    known_usernames = []
+
+    for filename in os.listdir(saved_faces_dir):
+        if filename.endswith(".jpg"):
+            path = os.path.join(saved_faces_dir, filename)
+            image = face_recognition.load_image_file(path)
+            encodings = face_recognition.face_encodings(image)
+            if encodings:
+                known_encodings.append(encodings[0])
+                username = filename.split("_")[0]  # Assumes filename format: username_timestamp.jpg
+                known_usernames.append(username)
+
+    # Load the new face and encode it
+    new_image = face_recognition.load_image_file(new_face_path)
+    new_encodings = face_recognition.face_encodings(new_image)
+
+    if not new_encodings:
+        return None  # No face found
+
+    for known_encoding, username in zip(known_encodings, known_usernames):
+        matches = face_recognition.compare_faces([known_encoding], new_encodings[0])
+        if True in matches:
+            return username  # Match found
+
+    return None  # No match
+
+
+
