@@ -8,6 +8,8 @@ from flask import flash
 # Load model once globally
 modelFile = "face_model.caffemodel"
 configFile = "deploy.prototxt"
+
+# Check if model and config files exist
 if not os.path.isfile(modelFile) or not os.path.isfile(configFile):
     print("[503: ERROR] Model or config file missing.")
     net = None

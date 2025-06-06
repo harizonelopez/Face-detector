@@ -105,3 +105,4 @@ Press `q` to quit the webcam window.
 
 - opencv-python
 - numpy
+- flask
