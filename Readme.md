@@ -20,6 +20,7 @@ Make sure you have the following installed:
 - flask 3.1+
 - OpenCV with DNN module
 - NumPy
+- setuptools
 
 You can install the dependencies with:
 
@@ -29,6 +30,20 @@ You can install the dependencies with:
 
 ---
 
+
+## Activate the virtual environment
+
+### On Windows (PowerShell)
+```bash
+   .\venv\Scripts\activate 
+```
+
+### On macOS/Linux
+```bash
+   source venv/bin/activate
+```
+
+---
 
 ## 🧠 Model Details
 
@@ -74,6 +89,10 @@ Press `q` to quit the webcam window.
 - ✅ Input validation (model file and webcam check)
 
 - ✅ Auto-clamping to prevent frame-bound errors
+
+- ✅ Train LBPH face recognizer
+
+- ✅ Recognize faces live from webcam
 
 ---
 
