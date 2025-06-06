@@ -31,3 +31,4 @@ def recognize():
     recognize_face_live()
     flash("Recognition session ended.", "info")
     return redirect(url_for('views.home'))
+

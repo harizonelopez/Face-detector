@@ -41,15 +41,15 @@
                         placeholder="e.g. dax" required>
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Capture Face</button>
+
+                <div class="mt-4 d-flex justify-content-center gap-3">
+                    <a href="{{ url_for('views.train') }}" class="btn btn-success" style="min-width: 180px;">Train Model</a>
+                    <a href="{{ url_for('views.recognize') }}" class="btn btn-warning" style="min-width: 180px;">Start Recognition</a>
+                </div>
             </form>
 
             <p id="loading" class="text-center mt-3" style="display:none; color:green;">Capturing face... Please wait.</p>
         </div>
-    </div>
-
-    <div class="mt-4 d-flex justify-content-center gap-3">
-        <a href="{{ url_for('views.train') }}" class="btn btn-success" style="min-width: 180px;">Train Model</a>
-        <a href="{{ url_for('views.recognize') }}" class="btn btn-warning" style="min-width: 180px;">Start Recognition</a>
     </div>
     
     <!-- Extra Js scripts-->

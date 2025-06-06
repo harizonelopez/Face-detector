@@ -1,9 +1,7 @@
 import cv2
 import os
 import numpy as np
-from datetime import datetime
 from flask import flash
-
 
 # Load DNN model globally
 modelFile = "face_model.caffemodel"
@@ -17,7 +15,7 @@ else:
 
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
 
-# Function to capture face images using LBPH (Local Binary Patterns Histograms)
+# Function to capture face images using LBPH {Local Binary Patterns Histograms}
 def capture_face_lbph(user_name):
     user_name = user_name.strip().lower().replace(" ", "_")
     if not user_name:
