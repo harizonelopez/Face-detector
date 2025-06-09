@@ -3,7 +3,7 @@ import os
 import numpy as np
 from flask import flash
 
-# Load DNN model globally
+# Load the DNN model globally
 modelFile = "face_model.caffemodel"
 configFile = "deploy.prototxt"
 
