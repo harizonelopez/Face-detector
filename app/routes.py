@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, request, flash, url_for, redirect
-from .face_detector import capture_face_lbph, train_recognizer, recognize_face_live
+from flask import Blueprint, render_template, request, flash, url_for, redirect, Response
+from .face_detector import capture_face_lbph, train_recognizer, recognize_face_live, generate_frames
 
 views = Blueprint('views', __name__)
 
@@ -31,4 +31,10 @@ def recognize():
     recognize_face_live()
     flash("Recognition session ended.", "info")
     return redirect(url_for('views.home'))
+
+
+@views.route('/video_feed')
+def video_feed():
+    return Response(generate_frames(),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
 

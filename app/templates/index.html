@@ -43,14 +43,21 @@
                 <button type="submit" class="btn btn-primary w-80">Capture Face</button>
 
                 <div class="mt-4 d-flex justify-content-center gap-3">
-                    <a href="{{ url_for('views.train') }}" class="btn btn-success" style="min-width: 140px;">Train Model</a>
-                    <a href="{{ url_for('views.recognize') }}" class="btn btn-warning" style="min-width: 140px;">Start Recognition</a>
+                    <a href="{{ url_for('views.train') }}" class="btn btn-success" style="min-width: 130px;">Train Model</a>
+                    <a href="{{ url_for('views.recognize') }}" class="btn btn-warning" style="min-width: 130px;">Start Recognition</a>
                 </div>
             </form>
 
             <p id="loading" class="text-center mt-3" style="display:none; color:green;">Capturing face... Please wait.</p>
         </div>
     </div>
+
+    <!-- Live camera feed section -->
+    <h4 class="text-center">Live Camera Feed</h4>
+    <div class="container mt-5 d-flex justify-content-center">
+        <img src="{{ url_for('views.video_feed') }}" width="100%" style="max-width: 480px;" />
+    </div>
+
     
     <!-- Extra Js scripts-->
     <script>

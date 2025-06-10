@@ -76,7 +76,7 @@ def capture_face_lbph(user_name):
 
     cap.release()
     cv2.destroyAllWindows()
-    flash(f"🎉 Success! {user_name.title()}, your face has been captured and saved securely.", "success")
+    flash(f"🎉 Success! {user_name.title()}, face model captured.", "success")
     print(f"[200: INFO] Captured {count} samples for {user_name}")
 
 
@@ -194,3 +194,20 @@ def recognize_face_live():
 
     cap.release()
     cv2.destroyAllWindows()
+
+
+camera = cv2.VideoCapture(0)
+
+def generate_frames():
+    while True:
+        success, frame = camera.read()
+        if not success:
+            break
+        else:
+            # Encode the frame in JPEG format
+            ret, buffer = cv2.imencode('.jpg', frame)
+            frame = buffer.tobytes()
+
+            # Yield the output frame in byte format
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
