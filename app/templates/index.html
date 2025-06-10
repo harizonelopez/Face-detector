@@ -40,11 +40,11 @@
                         class="form-control" 
                         placeholder="e.g. dax" required>
                 </div>
-                <button type="submit" class="btn btn-primary w-100">Capture Face</button>
+                <button type="submit" class="btn btn-primary w-80">Capture Face</button>
 
                 <div class="mt-4 d-flex justify-content-center gap-3">
-                    <a href="{{ url_for('views.train') }}" class="btn btn-success" style="min-width: 180px;">Train Model</a>
-                    <a href="{{ url_for('views.recognize') }}" class="btn btn-warning" style="min-width: 180px;">Start Recognition</a>
+                    <a href="{{ url_for('views.train') }}" class="btn btn-success" style="min-width: 140px;">Train Model</a>
+                    <a href="{{ url_for('views.recognize') }}" class="btn btn-warning" style="min-width: 140px;">Start Recognition</a>
                 </div>
             </form>
 
@@ -65,7 +65,7 @@
             if (flashContainer) {
                 flashContainer.style.display = "none";
             }
-        }, 5000); // ==> 5 seconds timeout
+        }, 5000); // ==> 5 seconds timeout 
     </script>
 </body>
 </html>
