@@ -87,7 +87,7 @@ def train_recognizer():
     model_path = os.path.join("face_data", "trained_model.yml")
 
     if not os.path.exists(label_map_file):
-        print("[ERROR] No label map found. Please register some faces first.")
+        print("[503: ERROR] No label map found. Please register some faces first.")
         return
 
     # Load label mappings
@@ -112,7 +112,7 @@ def train_recognizer():
             labels.append(user_id)
 
     if not faces:
-        print("[ERROR] No training data found.")
+        print("[404: ERROR] No training data found.")
         return
 
     # Create LBPH recognizer and train
@@ -120,7 +120,7 @@ def train_recognizer():
     recognizer.train(faces, np.array(labels))
     recognizer.save(model_path)
 
-    print("[INFO] Training completed and model saved at:", model_path)
+    print("[200: INFO] Training completed and model saved at:", model_path)
 
 
 # Function to recognize faces in live video feed
@@ -129,7 +129,7 @@ def recognize_face_live():
     label_map_file = os.path.join("face_data", "labels.txt")
 
     if not os.path.exists(model_path) or not os.path.exists(label_map_file):
-        print("[ERROR] Model or label map not found. Please train the model first.")
+        print("[503: ERROR] Model or label map not found. Please train the model first.")
         return
 
     # Load label map
@@ -146,15 +146,15 @@ def recognize_face_live():
     # Initialize webcam
     cap = cv2.VideoCapture(0)
     if not cap.isOpened():
-        print("[ERROR] Cannot access webcam.")
+        print("[404: ERROR] Cannot access webcam.")
         return
 
-    print("[INFO] Starting live recognition... Press 'q' to quit.")
+    print("[200: INFO] Starting live recognition... Press 'q' to quit.")
 
     while True:
         ret, frame = cap.read()
         if not ret:
-            print("[ERROR] Failed to grab frame.")
+            print("[404: ERROR] Failed to grab frame.")
             break
 
         h, w = frame.shape[:2]
