@@ -71,7 +71,7 @@ def capture_face_lbph(user_name):
             cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
 
         cv2.imshow("Capturing Face - Press Q to stop", frame)
-        if cv2.waitKey(1) & 0xFF == ord("q") or count >= 2:
+        if cv2.waitKey(1) & 0xFF == ord("q") or count >= 1:
             break
 
     cap.release()
