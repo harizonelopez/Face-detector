@@ -29,7 +29,7 @@
                 {% endif %}
             {% endwith %}
 
-            <!-- Form to capture face -->
+            <!-- Form to capture face ==> Live camera feed -->
             <form action="{{ url_for('views.capture') }}" method="POST" class="card p-4 shadow-sm" onsubmit="showLoading()">
                 <div class="container mt-3 d-flex justify-content-center">
                     <label for="username" class="form-label">Enter Your Name:</label>
@@ -51,13 +51,6 @@
             <p id="loading" class="text-center mt-3" style="display:none; color:green;">Capturing face... Please wait.</p>
         </div>
     </div>
-
-    <!-- Live camera feed section -->
-    <h4 class="text-center">Live Camera Feed</h4>
-    <div class="container mt-5 d-flex justify-content-center">
-        <img src="{{ url_for('views.video_feed') }}" width="100%" style="max-width: 480px;" />
-    </div>
-
     
     <!-- Extra Js scripts-->
     <script>

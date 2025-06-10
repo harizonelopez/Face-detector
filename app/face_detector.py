@@ -52,6 +52,12 @@ def capture_face_lbph(user_name):
         flash("Cannot access webcam.", "error")
         return
 
+    # Setup the display window
+    win_name = "Capturing Face - Press Q to stop"
+    cv2.namedWindow(win_name, cv2.WINDOW_NORMAL)
+    cv2.resizeWindow(win_name, 640, 480)
+    cv2.moveWindow(win_name, 300, 150)  # Adjust position as needed
+
     count = 0
     while True:
         ret, frame = cap.read()
@@ -64,19 +70,21 @@ def capture_face_lbph(user_name):
 
         for (x, y, w, h) in faces:
             face_img = gray[y:y+h, x:x+w]
-            img_path = os.path.join(dataset_dir, f"{user_name}.{user_id}.jpg")
+            img_path = os.path.join(dataset_dir, f"{user_name}.{user_id}.{count+1}.jpg")
             cv2.imwrite(img_path, face_img)
             count += 1
 
             cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
 
-        cv2.imshow("Capturing Face - Press Q to stop", frame)
+        cv2.imshow(win_name, frame)
+
+        # Break if 'q' is pressed or enough samples are collected
         if cv2.waitKey(1) & 0xFF == ord("q") or count >= 1:
             break
 
     cap.release()
     cv2.destroyAllWindows()
-    flash(f"🎉 Success! {user_name.title()}, face model captured.", "success")
+    flash(f"🎉 Success! {user_name.title()}, face captured.", "success")
     print(f"[200: INFO] Captured {count} samples for {user_name}")
 
 
@@ -198,6 +206,7 @@ def recognize_face_live():
 
 camera = cv2.VideoCapture(0)
 
+
 def generate_frames():
     while True:
         success, frame = camera.read()
@@ -211,3 +220,4 @@ def generate_frames():
             # Yield the output frame in byte format
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+            
