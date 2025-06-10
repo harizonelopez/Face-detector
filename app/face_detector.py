@@ -64,7 +64,7 @@ def capture_face_lbph(user_name):
 
         for (x, y, w, h) in faces:
             face_img = gray[y:y+h, x:x+w]
-            img_path = os.path.join(dataset_dir, f"{user_name}.{user_id}.{count}.jpg")
+            img_path = os.path.join(dataset_dir, f"{user_name}.{user_id}.jpg")
             cv2.imwrite(img_path, face_img)
             count += 1
 
