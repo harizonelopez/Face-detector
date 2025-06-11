@@ -14,6 +14,7 @@ else:
     print("[ERROR] DNN model or config not found!")
 
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+# camera = cv2.VideoCapture(0)
 
 # Function to capture face images using LBPH {Local Binary Patterns Histograms}
 def capture_face_lbph(user_name):
@@ -204,9 +205,73 @@ def recognize_face_live():
     cv2.destroyAllWindows()
 
 
-camera = cv2.VideoCapture(0)
+def generate_frames():
+    model_path = os.path.join("face_data", "trained_model.yml")
+    label_map_file = os.path.join("face_data", "labels.txt")
+
+    if not os.path.exists(model_path) or not os.path.exists(label_map_file):
+        print("[503: ERROR] Model or label map not found.")
+        return
+
+    # Load label map
+    label_map = {}
+    with open(label_map_file, "r") as f:
+        for line in f:
+            id_, name = line.strip().split(",")
+            label_map[int(id_)] = name
+
+    recognizer = cv2.face.LBPHFaceRecognizer_create()
+    recognizer.read(model_path)
+
+    cap = cv2.VideoCapture(0)
+
+    while True:
+        success, frame = cap.read()
+        if not success:
+            break
+
+        h, w = frame.shape[:2]
+        blob = cv2.dnn.blobFromImage(cv2.resize(frame, (300, 300)),
+                                     1.0, (300, 300),
+                                     (104.0, 177.0, 123.0),
+                                     swapRB=False, crop=False)
+        net.setInput(blob)
+        detections = net.forward()
+
+        for i in range(detections.shape[2]):
+            confidence = detections[0, 0, i, 2]
+            if confidence < 0.5:
+                continue
+
+            box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
+            (x1, y1, x2, y2) = box.astype("int")
+            x1, y1 = max(0, x1), max(0, y1)
+            x2, y2 = min(w - 1, x2), min(h - 1, y2)
+
+            face_crop = frame[y1:y2, x1:x2]
+            gray = cv2.cvtColor(face_crop, cv2.COLOR_BGR2GRAY)
+
+            try:
+                label, conf = recognizer.predict(gray)
+                name = label_map.get(label, "Unknown")
+                color = (0, 255, 0) if conf < 70 else (0, 0, 255)
+                text = f"{name} ({conf:.1f})"
+
+                cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
+                cv2.putText(frame, text, (x1, y1 - 10),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.8, color, 2)
+            except:
+                pass  # Skip prediction if face too small or model error
+
+        # Encode the frame as JPEG
+        ret, buffer = cv2.imencode('.jpg', frame)
+        frame = buffer.tobytes()
+
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
 
+"""
 def generate_frames():
     while True:
         success, frame = camera.read()
@@ -220,4 +285,4 @@ def generate_frames():
             # Yield the output frame in byte format
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-            
+"""
