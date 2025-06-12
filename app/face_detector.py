@@ -2,6 +2,7 @@ import cv2
 import os
 import numpy as np
 from flask import flash
+from .camera import Camera  
 
 # Load the DNN model globally
 modelFile = "face_model.caffemodel"
@@ -14,10 +15,28 @@ else:
     print("[ERROR] DNN model or config not found!")
 
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
-# camera = cv2.VideoCapture(0)
+# camera = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+
+camera = None
+
+def get_camera():
+    global camera
+    if camera is None:
+        try:
+            camera = Camera()
+        except RuntimeError as e:
+            print(f"[ERROR] {e}")
+            camera = None
+    return camera
+
 
 # Function to capture face images using LBPH {Local Binary Patterns Histograms}
 def capture_face_lbph(user_name):
+    frame = get_camera().get_frame()
+    if frame is None:
+        print("[404: ERROR] No frame captured.")
+        return
+
     user_name = user_name.strip().lower().replace(" ", "_")
     if not user_name:
         flash("Invalid username! Please enter a valid name.", "error")
@@ -48,11 +67,6 @@ def capture_face_lbph(user_name):
     else:
         user_id = label_map[user_name]
 
-    cap = cv2.VideoCapture(0)
-    if not cap.isOpened():
-        flash("Cannot access webcam.", "error")
-        return
-
     # Setup the display window
     win_name = "Capturing Face - Press Q to stop"
     cv2.namedWindow(win_name, cv2.WINDOW_NORMAL)
@@ -61,10 +75,9 @@ def capture_face_lbph(user_name):
 
     count = 0
     while True:
-        ret, frame = cap.read()
-        if not ret:
-            flash("Failed to grab frame.", "error")
-            break
+        frame = camera.get_frame()
+        if frame is None:
+            continue
 
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         faces = face_cascade.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=5)
@@ -83,7 +96,6 @@ def capture_face_lbph(user_name):
         if cv2.waitKey(1) & 0xFF == ord("q") or count >= 1:
             break
 
-    cap.release()
     cv2.destroyAllWindows()
     flash(f"🎉 Success! {user_name.title()}, face captured.", "success")
     print(f"[200: INFO] Captured {count} samples for {user_name}")
@@ -91,6 +103,11 @@ def capture_face_lbph(user_name):
 
 # Function to train the LBPH face recognizer
 def train_recognizer():
+    frame = get_camera().get_frame()
+    if frame is None:
+        print("[404: ERROR] No frame captured.")
+        return
+
     dataset_dir = os.path.join("face_data", "images")
     label_map_file = os.path.join("face_data", "labels.txt")
     model_path = os.path.join("face_data", "trained_model.yml")
@@ -134,6 +151,11 @@ def train_recognizer():
 
 # Function to recognize faces in live video feed
 def recognize_face_live():
+    frame = get_camera().get_frame() 
+    if frame is None:
+        print("[404: ERROR] No frame captured.")
+        return
+
     model_path = os.path.join("face_data", "trained_model.yml")
     label_map_file = os.path.join("face_data", "labels.txt")
 
@@ -152,19 +174,12 @@ def recognize_face_live():
     recognizer = cv2.face.LBPHFaceRecognizer_create()
     recognizer.read(model_path)
 
-    # Initialize webcam
-    cap = cv2.VideoCapture(0)
-    if not cap.isOpened():
-        print("[404: ERROR] Cannot access webcam.")
-        return
-
     print("[200: INFO] Starting live recognition... Press 'q' to quit.")
 
     while True:
-        ret, frame = cap.read()
-        if not ret:
-            print("[404: ERROR] Failed to grab frame.")
-            break
+        frame = camera.get_frame()
+        if frame is None:
+            continue
 
         h, w = frame.shape[:2]
         blob = cv2.dnn.blobFromImage(cv2.resize(frame, (300, 300)),
@@ -185,27 +200,37 @@ def recognize_face_live():
             x2, y2 = min(w - 1, x2), min(h - 1, y2)
 
             face_crop = frame[y1:y2, x1:x2]
+            if face_crop.size == 0 or face_crop.shape[0] < 10 or face_crop.shape[1] < 10:
+                continue
+
             gray = cv2.cvtColor(face_crop, cv2.COLOR_BGR2GRAY)
-            label, confidence = recognizer.predict(gray)
+            try:
+                label, conf = recognizer.predict(gray)
+                name = label_map.get(label, "Unknown")
+                text = f"{name} ({conf:.2f})"
+                color = (0, 255, 0) if conf < 70 else (0, 0, 255)
 
-            name = label_map.get(label, "Unknown")
-            text = f"{name} ({confidence:.2f})"
-            color = (0, 255, 0) if confidence < 70 else (0, 0, 255)
-
-            cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
-            cv2.putText(frame, text, (x1, y1 - 10),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.8, color, 2)
+                cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
+                cv2.putText(frame, text, (x1, y1 - 10),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.8, color, 2)
+            except:
+                continue
 
         cv2.imshow("Face Recognition", frame)
 
         if cv2.waitKey(1) & 0xFF == ord("q"):
             break
 
-    cap.release()
     cv2.destroyAllWindows()
 
 
+# Function to generate frames for video streaming
 def generate_frames():
+    frame = get_camera().get_frame()
+    if frame is None:
+        print("[404: ERROR] No frame captured.")
+        return
+
     model_path = os.path.join("face_data", "trained_model.yml")
     label_map_file = os.path.join("face_data", "labels.txt")
 
@@ -223,12 +248,10 @@ def generate_frames():
     recognizer = cv2.face.LBPHFaceRecognizer_create()
     recognizer.read(model_path)
 
-    cap = cv2.VideoCapture(0)
-
     while True:
-        success, frame = cap.read()
-        if not success:
-            break
+        frame = camera.get_frame()
+        if frame is None:
+            continue
 
         h, w = frame.shape[:2]
         blob = cv2.dnn.blobFromImage(cv2.resize(frame, (300, 300)),
@@ -237,6 +260,8 @@ def generate_frames():
                                      swapRB=False, crop=False)
         net.setInput(blob)
         detections = net.forward()
+
+        face_found = False
 
         for i in range(detections.shape[2]):
             confidence = detections[0, 0, i, 2]
@@ -250,13 +275,11 @@ def generate_frames():
 
             face_crop = frame[y1:y2, x1:x2]
 
-            # Skip if face_crop is empty or dimensions are too small
             if face_crop.size == 0 or face_crop.shape[0] < 10 or face_crop.shape[1] < 10:
                 continue
 
             gray = cv2.cvtColor(face_crop, cv2.COLOR_BGR2GRAY)
-            
-            # Resize gray image to ensure it is large enough for prediction
+
             try:
                 label, conf = recognizer.predict(gray)
                 name = label_map.get(label, "Unknown")
@@ -266,29 +289,22 @@ def generate_frames():
                 cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
                 cv2.putText(frame, text, (x1, y1 - 10),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.8, color, 2)
-            except:
-                pass  # Skip prediction if face too small or model error
 
-        # Encode the frame as JPEG
+                face_found = True
+            except:
+                continue
+
+        if not face_found:
+            cv2.putText(frame, "No Face Detected", (20, 40),
+                        cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 0, 255), 2)
+
         ret, buffer = cv2.imencode('.jpg', frame)
         frame = buffer.tobytes()
 
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-
-
-"""
-def generate_frames():
-    while True:
-        success, frame = camera.read()
-        if not success:
-            break
-        else:
-            # Encode the frame in JPEG format
-            ret, buffer = cv2.imencode('.jpg', frame)
-            frame = buffer.tobytes()
-
-            # Yield the output frame in byte format
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-"""
+        
+# Note: 
+#   The `generate_frames` function is used for streaming video frames in the web application.
+#   It continuously captures frames from the camera, processes them for face recognition
+#   using the trained LBPH model, and yields the processed frames in JPEG format.

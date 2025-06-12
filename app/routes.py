@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, request, flash, url_for, redirect, Response
 from .face_detector import capture_face_lbph, train_recognizer, recognize_face_live, generate_frames
+from . import camera
 
 views = Blueprint('views', __name__)
-
 
 @views.route('/')
 def home():
@@ -21,7 +21,7 @@ def capture():
 
 @views.route('/train')
 def train():
-    train_recognizer()
+    train_recognizer(camera)
     flash("Model trained successfully!", "success")
     return redirect(url_for('views.home'))
 
@@ -35,7 +35,8 @@ def recognize():
 
 @views.route('/video_feed')
 def video_feed():
-   return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+   return Response(generate_frames(camera),
+                   mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
 @views.route('/live')

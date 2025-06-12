@@ -15,3 +15,7 @@ face_data/
 
 # Logs
 *.log
+
+# Temporary files
+app_structure.txt
+
