@@ -249,8 +249,14 @@ def generate_frames():
             x2, y2 = min(w - 1, x2), min(h - 1, y2)
 
             face_crop = frame[y1:y2, x1:x2]
-            gray = cv2.cvtColor(face_crop, cv2.COLOR_BGR2GRAY)
 
+            # Skip if face_crop is empty or dimensions are too small
+            if face_crop.size == 0 or face_crop.shape[0] < 10 or face_crop.shape[1] < 10:
+                continue
+
+            gray = cv2.cvtColor(face_crop, cv2.COLOR_BGR2GRAY)
+            
+            # Resize gray image to ensure it is large enough for prediction
             try:
                 label, conf = recognizer.predict(gray)
                 name = label_map.get(label, "Unknown")
