@@ -38,7 +38,6 @@ def video_feed():
    return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
-# Live video feed route
 @views.route('/live')
 def live():
     return render_template("index.html")
