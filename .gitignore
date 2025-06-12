@@ -7,7 +7,7 @@ __pycache__/
 venv/
 ENV/
 
-# Images, trained models, and datasets
+# Images, trained models and datasets
 face_data/
 
 # VSCode settings folder
