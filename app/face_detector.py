@@ -15,7 +15,7 @@ else:
     print("[ERROR] DNN model or config not found!")
 
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
-# camera = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+# camera = cv2.VideoCapture[0, cv2.CAP_DSHOW]
 
 camera = None
 
@@ -305,6 +305,6 @@ def generate_frames():
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
         
 # Note: 
-#   The `generate_frames` function is used for streaming video frames in the web application.
+#   The `generate_frames` function is used for streaming video frames in the web application frontend.
 #   It continuously captures frames from the camera, processes them for face recognition
 #   using the trained LBPH model, and yields the processed frames in JPEG format.
