@@ -224,7 +224,7 @@ def recognize_face_live():
     cv2.destroyAllWindows()
 
 
-# Function to generate frames for video streaming
+# Function to generate the frames for video streaming
 def generate_frames():
     frame = get_camera().get_frame()
     if frame is None:
