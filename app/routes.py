@@ -42,4 +42,3 @@ def video_feed():
 @views.route('/live')
 def live():
     return render_template("index.html")
-
