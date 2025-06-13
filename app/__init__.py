@@ -1,8 +1,5 @@
 from flask import Flask
 import os
-# from .camera import Camera
-
-# camera = Camera()
 
 def create_app():
     app = Flask(__name__,  static_folder=os.path.join(os.path.dirname(__file__), 'static'))
