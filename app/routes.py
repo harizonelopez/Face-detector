@@ -21,8 +21,10 @@ def capture():
 
 @views.route('/train')
 def train():
-    train_recognizer(camera)
-    flash("Model trained successfully!", "success")
+    if train_recognizer():
+        flash("🎉 Model trained successfully!", "success")
+    else:
+        flash("⚠️ Training failed. Make sure face data exists.", b"warning")
     return redirect(url_for('views.home'))
 
 

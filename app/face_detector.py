@@ -106,7 +106,7 @@ def train_recognizer():
     frame = get_camera().get_frame()
     if frame is None:
         print("[404: ERROR] No frame captured.")
-        return
+        return False
 
     dataset_dir = os.path.join("face_data", "images")
     label_map_file = os.path.join("face_data", "labels.txt")
@@ -114,16 +114,14 @@ def train_recognizer():
 
     if not os.path.exists(label_map_file):
         print("[503: ERROR] No label map found. Please register some faces first.")
-        return
+        return False
 
-    # Load label mappings
     label_map = {}
     with open(label_map_file, "r") as f:
         for line in f:
             id_, name = line.strip().split(",")
             label_map[int(id_)] = name
 
-    # Prepare training data
     faces = []
     labels = []
 
@@ -133,20 +131,23 @@ def train_recognizer():
             img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
             if img is None:
                 continue
-            user_id = int(filename.split(".")[1])  # user.{id}.{count}.jpg
-            faces.append(img)
-            labels.append(user_id)
+            try:
+                user_id = int(filename.split(".")[1])
+                faces.append(img)
+                labels.append(user_id)
+            except ValueError:
+                print(f"[WARNING] Skipping malformed file: {filename}")
 
     if not faces:
         print("[404: ERROR] No training data found.")
-        return
+        return False
 
-    # Create LBPH recognizer and train
     recognizer = cv2.face.LBPHFaceRecognizer_create()
     recognizer.train(faces, np.array(labels))
     recognizer.save(model_path)
 
     print("[200: INFO] Training completed and model saved at:", model_path)
+    return True
 
 
 # Function to recognize faces in live video feed
