@@ -25,7 +25,7 @@ def get_camera():
         try:
             camera = Camera()
         except RuntimeError as e:
-            print(f"[ERROR] {e}")
+            print(f"[404: ERROR] {e}")
             camera = None
     return camera
 
@@ -226,7 +226,7 @@ def recognize_face_live():
 
 # Function to generate the frames for video streaming
 def generate_frames():
-    frame = get_camera().get_frame()
+    frame = camera.get_frame()
     if frame is None:
         print("[404: ERROR] No frame captured.")
         return
