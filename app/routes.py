@@ -37,8 +37,9 @@ def recognize():
 
 @views.route('/video_feed')
 def video_feed():
-   return Response(generate_frames(),
-                   mimetype='multipart/x-mixed-replace; boundary=frame')
+    mode = request.args.get('mode', 'detect')  # Default is detect
+    return Response(generate_frames(mode),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
 @views.route('/live')

@@ -8,15 +8,19 @@ from .camera import Camera
 modelFile = "face_model.caffemodel"
 configFile = "deploy.prototxt"
 
+# Load label mapping
+label_map_path = os.path.join("face_data", "labels.npy")
+model_path = os.path.join("face_data", "trained_model.yml")
+
+# Check if the model and config files exist
 if os.path.exists(modelFile) and os.path.exists(configFile):
     net = cv2.dnn.readNetFromCaffe(configFile, modelFile)
 else:
     net = None
     print("[ERROR] DNN model or config not found!")
 
+# Load the face detector once (DNN or Haar cascade, based on what you're using)
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
-# camera = cv2.VideoCapture[0, cv2.CAP_DSHOW]
-
 camera = None
 
 def get_camera():
@@ -226,84 +230,52 @@ def recognize_face_live():
 
 
 # Function to generate the frames for video streaming
-def generate_frames():
-    frame = camera.get_frame()
-    if frame is None:
-        print("[404: ERROR] No frame captured.")
+def generate_frames(mode="detect"):
+    if not camera or not camera.cap.isOpened():
+        print("[404: ERROR] Camera not available")
         return
 
-    model_path = os.path.join("face_data", "trained_model.yml")
-    label_map_file = os.path.join("face_data", "labels.txt")
-
-    if not os.path.exists(model_path) or not os.path.exists(label_map_file):
-        print("[503: ERROR] Model or label map not found.")
-        return
-
-    # Load label map
+    # Load recognizer and labels if in recognize mode
+    recognizer = None
     label_map = {}
-    with open(label_map_file, "r") as f:
-        for line in f:
-            id_, name = line.strip().split(",")
-            label_map[int(id_)] = name
-
-    recognizer = cv2.face.LBPHFaceRecognizer_create()
-    recognizer.read(model_path)
+    if mode == "recognize" and os.path.exists(model_path) and os.path.exists(label_map_path):
+        recognizer = cv2.face.LBPHFaceRecognizer_create()
+        recognizer.read(model_path)
+        label_map = np.load(label_map_path, allow_pickle=True).item()
 
     while True:
         frame = camera.get_frame()
         if frame is None:
             continue
 
-        h, w = frame.shape[:2]
-        blob = cv2.dnn.blobFromImage(cv2.resize(frame, (300, 300)),
-                                     1.0, (300, 300),
-                                     (104.0, 177.0, 123.0),
-                                     swapRB=False, crop=False)
-        net.setInput(blob)
-        detections = net.forward()
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5)
 
-        face_found = False
+        for (x, y, w, h) in faces:
+            roi_gray = gray[y:y+h, x:x+w]
+            color = (0, 255, 0)
 
-        for i in range(detections.shape[2]):
-            confidence = detections[0, 0, i, 2]
-            if confidence < 0.5:
-                continue
-
-            box = detections[0, 0, i, 3:7] * np.array([w, h, w, h])
-            (x1, y1, x2, y2) = box.astype("int")
-            x1, y1 = max(0, x1), max(0, y1)
-            x2, y2 = min(w - 1, x2), min(h - 1, y2)
-
-            face_crop = frame[y1:y2, x1:x2]
-
-            if face_crop.size == 0 or face_crop.shape[0] < 10 or face_crop.shape[1] < 10:
-                continue
-
-            gray = cv2.cvtColor(face_crop, cv2.COLOR_BGR2GRAY)
-
-            try:
-                label, conf = recognizer.predict(gray)
-                name = label_map.get(label, "Unknown")
-                color = (0, 255, 0) if conf < 70 else (0, 0, 255)
-                text = f"{name} ({conf:.1f})"
-
-                cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
-                cv2.putText(frame, text, (x1, y1 - 10),
+            if mode == "recognize" and recognizer:
+                id_, conf = recognizer.predict(roi_gray)
+                label = label_map.get(id_, "Unknown")
+                cv2.putText(frame, f"{label} ({int(conf)})", (x, y - 10),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 255), 2)
+                color = (0, 255, 255)
+            else:
+                cv2.putText(frame, "Face", (x, y - 10),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.8, color, 2)
 
-                face_found = True
-            except:
-                continue
+            cv2.rectangle(frame, (x, y), (x + w, y + h), color, 2)
 
-        if not face_found:
-            cv2.putText(frame, "No Face Detected", (20, 40),
-                        cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 0, 255), 2)
-
+        # Encode the frame and yield
         ret, buffer = cv2.imencode('.jpg', frame)
+        if not ret:
+            continue
         frame = buffer.tobytes()
 
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+
         
 # Note: 
 #   The `generate_frames` function is used for streaming video frames in the web application frontend.

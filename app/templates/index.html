@@ -44,7 +44,8 @@
 
                 <div class="mt-4 d-flex justify-content-center gap-3">
                     <a href="{{ url_for('views.train') }}" class="btn btn-success" style="min-width: 130px;">Train Model</a>
-                    <a href="{{ url_for('views.recognize') }}" class="btn btn-warning" style="min-width: 130px;">Start Recognition</a>
+                    <button type="button" onclick="setRecognitionMode('recognize')" class="btn btn-warning" style="min-width: 130px;">Start Recognition</button>
+                    <button type="button" onclick="setRecognitionMode('detect')" class="btn btn-secondary" style="min-width: 130px;">Stop Recognition</button>
                 </div>
             </form>
 
@@ -55,7 +56,7 @@
     <!-- Live Face Recognition Section -->
      <h2>Live Face Recognition</h2>
     <div class="container mt-4 d-flex justify-content-center">
-        <img src="{{ url_for('views.video_feed') }}" width="550" height="400">
+        <img id="video-feed" src="{{ url_for('views.video_feed') }}?mode=detect" width="550" height="400">
     </div>
     
     <!-- Extra Js scripts-->
@@ -72,6 +73,14 @@
                 flashContainer.style.display = "none";
             }
         }, 5000); // ==> 5 seconds timeout 
+    </script>
+    
+    <script>
+        // Function to handle the recognition mode change
+        function setRecognitionMode(mode) {
+            const videoFeed = document.getElementById("video-feed");
+            videoFeed.src = `/video_feed?mode=${mode}`;
+        }
     </script>
 </body>
 </html>
