@@ -22,6 +22,7 @@ face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_fronta
 camera = None
 
 
+# To ensure the face_data directory exists 
 def get_camera():
     global camera
     if camera is None:
@@ -33,6 +34,7 @@ def get_camera():
     return camera
 
 
+# Capture face using LBPH (Local Binary Patterns Histograms)
 def capture_face_lbph(user_name):
     cam = get_camera()
     frame = cam.get_frame()
@@ -94,6 +96,7 @@ def capture_face_lbph(user_name):
     print(f"[200: INFO] Captured {count} samples for {user_name}")
 
 
+# Train the recognizer using captured faces models
 def train_recognizer():
     cam = get_camera()
     frame = cam.get_frame()
@@ -137,6 +140,7 @@ def train_recognizer():
     return True
 
 
+# Recognize face using live camera feed
 def recognize_face_live():
     cam = get_camera()
     frame = cam.get_frame()
@@ -195,6 +199,7 @@ def recognize_face_live():
     return None, "Unknown"
 
 
+# Generate frames for streaming
 def generate_frames(mode="detect"):
     cam = get_camera()
     if not cam or not cam.cap.isOpened():
@@ -242,10 +247,12 @@ def generate_frames(mode="detect"):
         yield (b'--frame\r\nContent-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
 
 
+# Generate frames for detection mode
 def generate_frames_detect():
     return generate_frames(mode="detect")
 
 
+# Generate frames for recognization mode
 def generate_frames_recognize_then_detect():
     recognized = False
     while not recognized:
