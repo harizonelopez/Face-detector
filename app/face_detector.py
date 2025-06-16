@@ -40,7 +40,6 @@ def load_face_cascade():
 face_cascade = load_face_cascade()
 camera = None
 
-
 # To ensure the face_data directory exists 
 def get_camera():
     global camera
