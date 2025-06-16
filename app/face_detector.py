@@ -158,7 +158,7 @@ def train_recognizer():
     return True
 
 
-# Recognize face using live camera feed
+# Recognize the face model using live camera feed
 def recognize_face_live():
     cam = get_camera()
     frame = cam.get_frame()
