@@ -1,4 +1,4 @@
-from app import create_app, camera
+from app import create_app
 
 app = create_app()
 

@@ -35,7 +35,7 @@ You can install the dependencies with:
 
 ### On Windows (PowerShell)
 ```bash
-   .\venv\Scripts\activate 
+   venv\scripts\activate 
 ```
 
 ### On macOS/Linux
