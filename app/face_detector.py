@@ -17,8 +17,27 @@ else:
     net = None
     print("[ERROR] DNN model or config not found!")
 
-# Load face detector
-face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+
+# Ensure the face_data directory exists
+def load_face_cascade():
+    # First try loading from local 'face_data' folder
+    local_path = os.path.join("face_data", "haarcascade_frontalface_default.xml")
+    if os.path.exists(local_path):
+        cascade = cv2.CascadeClassifier(local_path)
+        if not cascade.empty():
+            print(f"[100: INFO] Loaded Haar Cascade from {local_path}")
+            return cascade
+
+    # Fallback to OpenCV's built-in path
+    default_path = cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
+    cascade = cv2.CascadeClassifier(default_path)
+    if cascade.empty():
+        raise IOError(f"[503: ERROR] Failed to load Haar Cascade from both local and OpenCV default path.")
+    print(f"[100: INFO] Loaded Haar Cascade from OpenCV default path: {default_path}")
+    return cascade
+
+# Load face cascade & the camera globally
+face_cascade = load_face_cascade()
 camera = None
 
 
