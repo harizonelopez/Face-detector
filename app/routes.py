@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash, url_for, redirect, Response, session
-from .face_detector import capture_face_lbph, train_recognizer, recognize_face_live, generate_frames_recognize_then_detect, generate_frames_detect
+from .face_detector import capture_face_lbph, train_recognizer, generate_frames_recognize_then_detect, generate_frames_detect
 from . import camera
 
 views = Blueprint('views', __name__)
