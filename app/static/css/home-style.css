@@ -26,7 +26,7 @@ h2 {
     font-weight: 700;
 }
 
-/* Form input styling */
+/* Form input */
 input[type="text"] {
     border-radius: 6px;
     border: 1.5px solid #ced4da;
@@ -41,7 +41,7 @@ input[type="text"]:focus {
     box-shadow: 0 0 8px rgba(0,123,255,0.25);
 }
 
-/* Submit button styling */
+/* Submit button */
 button[type="submit"] {
     width: 100%;
     background-color: #007bff; 
@@ -66,15 +66,6 @@ footer {
     font-size: 0.9rem;
     color: #777;
 }
-
-/*
-.alert {
-  padding: 10px;
-  margin: 10px 0;
-  border-radius: 4px;
-  color: white;
-  font-weight: bold;
-} */
 
 /* Responsive tweak */
 @media (max-width: 576px) {
