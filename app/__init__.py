@@ -6,7 +6,6 @@ def create_app():
     app.config['SECRET_KEY'] = 'J@rvis_007'
     app.config['UPLOAD_FOLDER'] = 'static/face_data'
 
-    # Import and register blueprint & routes
     from .routes import views
     app.register_blueprint(views, url_prefix='/')
 
