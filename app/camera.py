@@ -3,7 +3,7 @@ import threading
 
 class Camera:
     def __init__(self):
-        # Force DirectShow backend for compatibility on Windows
+        # Force 'DirectShow' backend for compatibility on Windows
         self.cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
         if not self.cap.isOpened():
             raise RuntimeError("[404: ERROR] Could not open video source (webcam).")
