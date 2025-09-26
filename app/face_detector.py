@@ -226,13 +226,20 @@ def generate_frames(mode="detect"):
 
     recognizer = None
     label_map = {}
-    if mode == "recognize" and os.path.exists(model_path) and os.path.exists(label_map_file):
-        recognizer = cv2.face.LBPHFaceRecognizer_create()
-        recognizer.read(model_path)
-        with open(label_map_file, "r") as f:
-            for line in f:
-                id_, name = line.strip().split(",")
-                label_map[int(id_)] = name
+
+    # Load recognizer and labels if in recognize mode
+    if mode == "recognize":
+        if os.path.exists(model_path) and os.path.exists(label_map_file):
+            recognizer = cv2.face.LBPHFaceRecognizer_create()
+            recognizer.read(model_path)
+            with open(label_map_file, "r") as f:
+                for line in f:
+                    parts = line.strip().split(",")
+                    if len(parts) == 2:
+                        id_, name = parts
+                        label_map[int(id_)] = name
+        else:
+            print("[503: ERROR] Model or label map missing!")
 
     while True:
         frame = cam.get_frame()
@@ -244,19 +251,31 @@ def generate_frames(mode="detect"):
 
         for (x, y, w, h) in faces:
             roi = gray[y:y+h, x:x+w]
+
             label = "Face"
             color = (0, 255, 0)
 
-            if mode == "recognize" and recognizer:
-                try:
-                    id_, conf = recognizer.predict(roi)
-                    label = f"{label_map.get(id_, 'Unknown')} ({int(conf)})"
-                    color = (0, 255, 255)
-                except:
-                    pass
+            if mode == "recognize" and recognizer is not None:
+                if roi is not None and roi.size > 0:
+                    try:
+                        roi_resized = cv2.resize(roi, (200, 200))
+                        id_, conf = recognizer.predict(roi_resized)
+                        name = label_map.get(id_, "Unknown")
+                        label = f"{name} ({int(conf)})"
+                        color = (0, 255, 255)
+                    except Exception as e:
+                        print("[ERROR in predict]", e)
+                        label = "Unknown"
+                        color = (0, 0, 255)
+                else:
+                    print("[WARNING] Empty ROI skipped")
 
+            # Draw rectangle and label (pro style)
             cv2.rectangle(frame, (x, y), (x+w, y+h), color, 2)
-            cv2.putText(frame, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, color, 2)
+            text_x = x
+            text_y = y - 10 if y - 10 > 10 else y + h + 20
+            cv2.putText(frame, label, (text_x, text_y),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.8, color, 2)
 
         ret, buffer = cv2.imencode('.jpg', frame)
         if not ret:
