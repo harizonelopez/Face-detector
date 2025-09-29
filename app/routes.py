@@ -16,7 +16,7 @@ def home():
 # Route to handle the face capture
 @views.route('/capture', methods=["POST"])
 def capture():
-    username = request.form.get("username")
+    username = request.form.get("username").strip()
     if username:
         capture_face_lbph(username)
     else:
@@ -28,6 +28,8 @@ def capture():
 @views.route('/train')
 def train():
     if train_recognizer():
+        print("Training started...") # Debug log
+        print("Training completed...") # Debug log
         flash("🎉 Model trained successfully!", "success")
     else:
         flash("⚠️ Training failed. Make sure face data exists.", "warning")
