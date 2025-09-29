@@ -48,7 +48,9 @@ def recognize():
 def video_feed():
     mode = request.args.get("mode", "detect") # Default to `detection` mode
     if mode == "recognize":
-        return Response(generate_frames_recognize_then_detect(), mimetype='multipart/x-mixed-replace; boundary=frame')
+        return Response(generate_frames_recognize_then_detect(), 
+                        mimetype='multipart/x-mixed-replace; boundary=frame')
     else:
-        return Response(generate_frames_detect(), mimetype='multipart/x-mixed-replace; boundary=frame')
+        return Response(generate_frames_detect(), 
+                        mimetype='multipart/x-mixed-replace; boundary=frame')
     
