@@ -20,20 +20,41 @@ else:
 
 # Ensure the face_data directory exists
 def load_face_cascade():
-    # First try loading from local 'face_data' folder
-    local_path = os.path.join("face_data", "haarcascade_frontalface_default.xml")
+    # Get the project root directory
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+    # First try the local face_data folder
+    local_path = os.path.join(
+        base_dir,
+        "face_data",
+        "haarcascade_frontalface_default.xml"
+    )
+
     if os.path.exists(local_path):
         cascade = cv2.CascadeClassifier(local_path)
         if not cascade.empty():
             print(f"[100: INFO] Loaded Haar Cascade from {local_path}")
             return cascade
 
-    # Fallback to OpenCV's built-in path
-    default_path = cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
+    # Fallback to OpenCV's built-in cascade
+    default_path = os.path.join(
+        cv2.data.haarcascades,
+        "haarcascade_frontalface_default.xml"
+    )
+
     cascade = cv2.CascadeClassifier(default_path)
+
     if cascade.empty():
-        raise IOError(f"[503: ERROR] Failed to load Haar Cascade from both local and OpenCV default path.")
-    print(f"[100: INFO] Loaded Haar Cascade from OpenCV default path: {default_path}")
+        raise IOError(
+            "[503: ERROR] Failed to load Haar Cascade "
+            "from both local and OpenCV default path."
+        )
+
+    print(
+        f"[100: INFO] Loaded Haar Cascade "
+        f"from OpenCV default path: {default_path}"
+    )
+
     return cascade
 
 # Load face cascade & the camera globally
@@ -96,6 +117,7 @@ def capture_face_lbph(user_name):
             continue
 
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
         faces = face_cascade.detectMultiScale(gray, 1.2, 5)
 
         for (x, y, w, h) in faces:
@@ -247,7 +269,7 @@ def generate_frames(mode="detect"):
             continue
 
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        faces = face_cascade.detectMultiScale(gray, 1.1, 5)
+        faces = face_cascade.detectMultiScale(gray, 1.2, 5) 
 
         for (x, y, w, h) in faces:
             roi = gray[y:y+h, x:x+w]
